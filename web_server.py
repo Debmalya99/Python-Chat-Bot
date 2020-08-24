@@ -3,17 +3,19 @@ from chatterbot.trainers import ListTrainer
 
 from flask import Flask,jsonify
 import json
+import pickle
 
 # Create a new chat bot named Charlie
 chatbot = ChatBot('Customer Care')
 
 trainer = ListTrainer(chatbot)
+corpus_list = []
 
-trainer.train([
-    "Hi, How can I help you?",
-    "Sir, what is your request?",
-    "Your request has been recorded and reported."
-])
+with open("corpus.bin","rb") as bin_file:
+    corpus = pickle.load(bin_file)
+    corpus_list = corpus
+
+trainer.train(corpus_list)
 
 
 app = Flask(__name__)
